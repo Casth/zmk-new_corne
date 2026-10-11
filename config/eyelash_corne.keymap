@@ -46,16 +46,73 @@
         };
     };
 
+    macros {
+        lang_win: lang_win {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <10>;
+            bindings
+                = <&macro_press &kp LSHFT>
+                , <&macro_press &kp LALT>
+                , <&macro_wait_time 200>
+                , <&macro_release &kp LSHFT>
+                , <&macro_release &kp LALT>
+                ;
+        };
+
+        lang_mac: lang_mac {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <10>;
+            bindings
+                = <&macro_press &kp LGUI>
+                , <&macro_press &kp LALT>
+                , <&macro_press &kp SPACE>
+                , <&macro_wait_time 100>
+                , <&macro_release &kp LGUI>
+                , <&macro_release &kp LALT>
+                , <&macro_release &kp SPACE>
+                ;
+        };
+
+        lang_mac_term: lang_mac_term {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <10>;
+            bindings
+                = <&macro_press &kp LCTRL>
+                , <&macro_press &kp LALT>
+                , <&macro_press &kp SPACE>
+                , <&macro_wait_time 100>
+                , <&macro_release &kp LCTRL>
+                , <&macro_release &kp LALT>
+                , <&macro_release &kp SPACE>
+                ;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
         default_layer {
             display-name = "QWERTY";
             bindings = <
-&kp TAB    &kp Q  &kp W  &kp E     &kp R  &kp T                               &kp UP                &kp Y        &kp U  &kp I      &kp O    &kp P     &kp BSPC
-&td0       &kp A  &kp S  &kp D     &kp F  &kp G                     &kp LEFT  &kp ENTER  &kp RIGHT  &kp H        &kp J  &kp K      &kp L    &kp SEMI  &kp SQT
-&kp LCTRL  &kp Z  &kp X  &kp C     &kp V  &kp B        &kp SPACE              &kp DOWN              &kp N        &kp M  &kp COMMA  &kp DOT  &kp FSLH  &kp ESC
-                         &kp LGUI  &mo 1  &lt 3 SPACE                                               &lt 3 ENTER  &mo 2  &kp RALT
+// ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+// │     Caps     │       Q      │    W (Alt)   │       E      │       R      │       T      │                                           │       Y      │       U      │       I      │       O      │       P      │       [      │
+// └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+       &kp TAB         &kp Q           &kp W          &kp E          &kp R          &kp T                      &kp UP                          &kp Y          &kp U          &kp I          &kp O          &kp P        &kp BSPC
+// ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+// │    LShift    │   A (LGui)   │       S      │  D (LCtrl)   │  F (LShift)  │       G      │                                           │       H      │  J (RShift)  │  K (LCtrl)   │       L      │   ; (RGui)   │       '      │
+// └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+        &td0           &kp A           &kp S          &kp D          &kp F          &kp G            &kp LEFT  &kp ENTER  &kp RIGHT            &kp H          &kp J          &kp K          &kp L         &kp SEMI       &kp SQT
+// ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+// │    LCtrl     │       Z      │       X      │       C      │       V      │       B      │                                           │       N      │       M      │       ,      │       .      │       /      │   \ (Ctrl)   │
+// └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+      &kp LCTRL        &kp Z           &kp X          &kp C          &kp V          &kp B        &kp SPACE     &kp DOWN                        &kp N          &kp M        &kp COMMA       &kp DOT        &kp FSLH       &kp ESC
+//                                              ┌──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┐
+//                                              │  Esc (Mo3)   │  Bksp (Mo2)  │  Enter (Mo1) │                                           │  Space (Mo1) │   Tab (Mo2)  │   Del (Mo3)  │
+//                                              └──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┘
+                                                    &kp LGUI         &mo 1       &lt 3 SPACE                                                &lt 3 ENTER       &mo 2        &kp RALT
             >;
 
             sensor-bindings = <&rsr_vol &rsr_trans>;
