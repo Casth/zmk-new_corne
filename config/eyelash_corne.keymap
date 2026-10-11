@@ -11,6 +11,14 @@
 #include <dt-bindings/zmk/pointing.h>
 #include <dt-bindings/zmk/rgb.h>
 
+// Layer definition
+#define WIN    0
+#define MAC    1
+#define SYM    2
+#define NWIN   3
+#define NMAC   4
+#define FUN    5
+
 &soft_off { hold-time-ms = <2000>; };
 
 / {
@@ -42,12 +50,12 @@
 
         softoff {
             bindings = <&soft_off>;
-            key-positions = <1 15 29>;
+            key-positions = <1 15 29>;  // Q + S + Z
         };
     };
 
     macros {
-        lang_win: lang_win {
+        lwin: lang_win {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             wait-ms = <10>;
@@ -60,7 +68,7 @@
                 ;
         };
 
-        lang_mac: lang_mac {
+        lmac: lang_mac {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             wait-ms = <10>;
@@ -75,7 +83,7 @@
                 ;
         };
 
-        lang_mac_term: lang_mac_term {
+        lmact: lang_mac_term {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             wait-ms = <10>;
@@ -89,68 +97,161 @@
                 , <&macro_release &kp SPACE>
                 ;
         };
+
+        emoj: emoji_mac {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <10>;
+            bindings
+                = <&macro_press &kp LGUI>
+                , <&macro_press &kp LCTRL>
+                , <&macro_press &kp SPACE>
+                , <&macro_wait_time 100>
+                , <&macro_release &kp LGUI>
+                , <&macro_release &kp LCTRL>
+                , <&macro_release &kp SPACE>
+                ;
+        };
     };
 
     keymap {
         compatible = "zmk,keymap";
 
-        default_layer {
-            display-name = "QWERTY";
+        default_layer { // 0: WIN
+            display-name = "Win";
             bindings = <
 // ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
 // │     Caps     │       Q      │    W (Alt)   │       E      │       R      │       T      │                                           │       Y      │       U      │       I      │       O      │       P      │       [      │
 // └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
-       &kp TAB         &kp Q           &kp W          &kp E          &kp R          &kp T                      &kp UP                          &kp Y          &kp U          &kp I          &kp O          &kp P        &kp BSPC
+      &kp CAPS         &kp Q        &mt LALT W        &kp E          &kp R          &kp T                      &kp UP                          &kp Y          &kp U          &kp I          &kp O          &kp P        &kp LBKT
 // ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
 // │    LShift    │   A (LGui)   │       S      │  D (LCtrl)   │  F (LShift)  │       G      │                                           │       H      │  J (RShift)  │  K (LCtrl)   │       L      │   ; (RGui)   │       '      │
 // └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
-        &td0           &kp A           &kp S          &kp D          &kp F          &kp G            &kp LEFT  &kp ENTER  &kp RIGHT            &kp H          &kp J          &kp K          &kp L         &kp SEMI       &kp SQT
+      &kp LSHFT      &mt LGUI A        &kp S       &mt LCTRL D    &mt LSHFT F       &kp G            &kp LEFT  &kp ENTER  &kp RIGHT            &kp H       &mt RSHFT J    &mt LCTRL K       &kp L      &mt RGUI SEMI     &kp SQT
 // ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
-// │    LCtrl     │       Z      │       X      │       C      │       V      │       B      │                                           │       N      │       M      │       ,      │       .      │       /      │   \ (Ctrl)   │
+// │    LCtrl     │       Z      │       X      │       C      │       V      │       B      │                                           │       N      │       M      │       ,      │       .      │       /      │   # (Ctrl)   │
 // └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
-      &kp LCTRL        &kp Z           &kp X          &kp C          &kp V          &kp B        &kp SPACE     &kp DOWN                        &kp N          &kp M        &kp COMMA       &kp DOT        &kp FSLH       &kp ESC
+      &kp LCTRL        &kp Z           &kp X          &kp C          &kp V          &kp B        &kp SPACE     &kp DOWN                        &kp N          &kp M        &kp COMMA       &kp DOT        &kp FSLH   &mt LCTRL NUHS
 //                                              ┌──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┐
-//                                              │  Esc (Mo3)   │  Bksp (Mo2)  │  Enter (Mo1) │                                           │  Space (Mo1) │   Tab (Mo2)  │   Del (Mo3)  │
+//                                              │  Esc (FUN)   │  Bksp (NWIN) │  Enter (SYM) │                                           │  Space (SYM) │   Tab (NWIN) │   Del (FUN)  │
 //                                              └──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┘
-                                                    &kp LGUI         &mo 1       &lt 3 SPACE                                                &lt 3 ENTER       &mo 2        &kp RALT
+                                                  &lt FUN ESC   &lt NWIN BSPC    &lt SYM RET                                              &lt SYM SPACE   &lt NWIN TAB   &lt FUN DEL
             >;
-
             sensor-bindings = <&rsr_vol &rsr_trans>;
         };
 
-        lower_layer {
-            display-name = "NUMBER";
+        mac_layer { // 1: MAC
+            display-name = "Mac";
             bindings = <
-&trans  &kp N1           &kp N2          &kp N3        &kp N4        &kp N5                                         &mmv MOVE_UP                     &kp N6           &kp N7           &kp N8           &kp N9           &kp N0    &kp BSPC
-&trans  &bt BT_CLR_ALL   &bt BT_SEL 0    &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3                   &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &kp LEFT         &kp DOWN         &kp UP           &kp RIGHT        &kp HOME  &kp PG_UP
-&trans  &rgb_ug RGB_OFF  &rgb_ug RGB_ON  &trans        &trans        &rgb_ug RGB_EFF  &kp C_MUTE                    &mmv MOVE_DOWN                   &rgb_ug RGB_EFR  &rgb_ug RGB_SPI  &rgb_ug RGB_BRI  &rgb_ug RGB_BRD  &kp END   &kp PG_DN
-                                         &trans        &trans        &trans                                                                          &kp INS          &kp DEL          &trans
+// ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+// │       ⌄      │       ⌄      │       ⌄      │       ⌄      │       ⌄      │       ⌄      │                                           │       ⌄      │       ⌄      │       ⌄      │       ⌄      │       ⌄      │       ⌄      │
+// └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+        &trans         &trans         &trans         &trans         &trans         &trans                      &trans                         &trans         &trans         &trans         &trans         &trans         &trans
+// ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+// │       ⌄      │   A (LCtrl)  │       ⌄      │   D (LGui)   │       ⌄      │       ⌄      │                                           │       ⌄      │       ⌄      │   K (LGui)   │       ⌄      │   ; (RCtrl)  │       ⌄      │
+// └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+        &trans      &mt LCTRL A       &trans       &mt LGUI D       &trans         &trans             &trans   &trans   &trans                &trans         &trans       &mt LGUI K       &trans     &mt RCTRL SEMI     &trans
+// ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+// │       ⌄      │       ⌄      │       ⌄      │       ⌄      │       ⌄      │       ⌄      │                                           │       ⌄      │       ⌄      │       ⌄      │       ⌄      │       ⌄      │       ⌄      │
+// └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+        &trans         &trans         &trans         &trans         &trans         &trans        &trans        &trans                         &trans         &trans         &trans         &trans         &trans         &trans
+//                                              ┌──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┐
+//                                              │       ⌄      │  Bksp (NMAC) │       ⌄      │                                           │       ⌄      │  Tab (NMAC)  │       ⌄      │
+//                                              └──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┘
+                                                     &trans     &lt NMAC BSPC      &trans                                                     &trans      &lt NMAC TAB      &trans
             >;
-
             sensor-bindings = <&rsr_vol &rsr_trans>;
         };
 
-        raise_layer {
-            display-name = "SYMBOL";
+        symbol_layer { // 2: SYM
+            display-name = "Symbol";
             bindings = <
-&trans  &kp EXCL      &kp AT        &kp HASH   &kp DLLR   &kp PRCNT                            &mmv MOVE_UP                     &kp CARET  &kp AMPS   &kp ASTRK  &kp LPAR  &kp RPAR  &kp BSPC
-&trans  &bt BT_CLR    &mkp LCLK     &mkp MCLK  &mkp RCLK  &mkp MB4             &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &kp MINUS  &kp EQUAL  &kp LBKT   &kp RBKT  &kp BSLH  &kp GRAVE
-&trans  &out OUT_USB  &out OUT_BLE  &none      &none      &mkp MB5   &trans                    &mmv MOVE_DOWN                   &kp UNDER  &kp PLUS   &kp LBRC   &kp RBRC  &kp PIPE  &kp TILDE
-                                    &trans     &trans     &kp SPACE                                                             &kp RET    &trans     &trans
+// ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+// │       ⌄      │       ⌄      │       *      │       {      │       }      │       |      │                                           │       '      │       ?      │       +      │       =      │       #      │    (none)    │
+// └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+        &trans         &trans        &kp STAR       &kp LBRC       &kp RBRC       &kp PIPE                      &trans                        &kp SQT      &kp QMARK       &kp PLUS       &kp EQUAL      &kp POUND        &none
+// ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+// │       ^      │       `      │       %      │       (      │       )      │       &      │                                           │       "      │       _      │       -      │       /      │       :      │       $      │
+// └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+       &kp CARET     &kp GRAVE      &kp PRCNT       &kp LPAR       &kp RPAR       &kp AMPS            &trans   &trans   &trans               &kp DQT      &kp UNDER       &kp MINUS      &kp FSLH       &kp COLON      &kp DLLR
+// ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+// │     menu     │       ⌄      │       ~      │       [      │       ]      │       @      │                                           │       \      │       !      │       <      │       >      │    (emoji)   │       ⌄      │
+// └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+     &kp K_CMENU       &trans       &kp TILDE       &kp LBKT       &kp RBKT        &kp AT        &trans        &trans                        &kp BSLH       &kp EXCL        &kp LT         &kp GT          &emoj         &trans
+//                                              ┌──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┐
+//                                              │       ⌄      │       ⌄      │       ⌄      │                                           │       ⌄      │       ⌄      │       ⌄      │
+//                                              └──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┘
+                                                     &trans         &trans         &trans                                                     &trans         &trans         &trans
             >;
-
             sensor-bindings = <&rsr_vol &rsr_trans>;
         };
 
-        layer_3 {
-            display-name = "Fn";
+        num_win_layer { // 3: NWIN
+            display-name = "Number";
             bindings = <
-&studio_unlock  &kp F1      &kp F2     &kp F3       &kp F4     &kp F5                                  &mmv MOVE_UP                     &kp F6       &kp F7     &kp F8       &kp F9      &kp F10          &kp F11
-&trans          &trans      &mkp LCLK  &mkp MCLK    &mkp RCLK  &mkp MB4                &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &bootloader  &mkp LCLK  &mkp MCLK    &mkp RCLK   &kp PRINTSCREEN  &kp F12
-&trans          &sys_reset  &trans     &bootloader  &trans     &mkp MB5  &kp C_MUTE                    &mmv MOVE_DOWN                   &trans       &trans     &bootloader  &sys_reset  &kp SCROLLLOCK   &kp PAUSE_BREAK
-                                       &trans       &trans     &trans                                                                   &trans       &trans     &trans
+// ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+// │       ⌄      │       0      │       9      │       8      │       7      │       6      │                                           │     home     │   page down  │    page up   │      end     │    (none)    │    (none)    │
+// └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+        &trans         &kp N0         &kp N9         &kp N8         &kp N7         &kp N6                      &trans                        &kp HOME      &kp PG_DN      &kp PG_UP        &kp END         &none          &none
+// ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+// │       ⌄      │       1      │       2      │       3      │       4      │       5      │                                           │     left     │      down    │      up      │     right    │     RGui     │    (none)    │
+// └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+        &trans         &kp N1         &kp N2         &kp N3         &kp N4         &kp N5              &trans   &trans   &trans               &kp LEFT      &kp DOWN        &kp UP        &kp RIGHT      &kp RGUI         &none
+// ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+// │       ⌄      │     undo     │      cut     │     copy     │     paste    │     redo     │                                           │ lang mac ter │   lang mac   │   lang win   │    (none)    │    (none)    │    (none)    │
+// └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+        &trans        &kp LC(Z)      &kp LC(X)      &kp LC(C)      &kp LC(V)      &kp LC(Y)      &trans        &trans                         &lmact          &lmac          &lwin          &none          &none          &none
+//                                              ┌──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┐
+//                                              │       ⌄      │       ⌄      │       ⌄      │                                           │       ⌄      │       ⌄      │       ⌄      │
+//                                              └──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┘
+                                                     &trans         &trans         &trans                                                     &trans         &trans         &trans
             >;
+            sensor-bindings = <&rsr_vol &rsr_trans>;
+        };
 
+        num_mac_layer { // 4: NMAC
+            display-name = "Number";
+            bindings = <
+// ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+// │       ⌄      │       ⌄      │       ⌄      │       ⌄      │       ⌄      │       ⌄      │                                           │       ⌄      │       ⌄      │       ⌄      │       ⌄      │       ⌄      │       ⌄      │
+// └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+        &trans         &trans         &trans         &trans         &trans         &trans                      &trans                         &trans         &trans         &trans         &trans         &trans         &trans
+// ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+// │       ⌄      │       ⌄      │       ⌄      │       ⌄      │       ⌄      │       ⌄      │                                           │       ⌄      │       ⌄      │       ⌄      │       ⌄      │       ⌄      │       ⌄      │
+// └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+        &trans         &trans         &trans         &trans         &trans         &trans             &trans   &trans   &trans                &trans         &trans         &trans         &trans         &trans         &trans
+// ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+// │       ⌄      │     undo     │      cut     │     copy     │     paste    │     redo     │                                           │       ⌄      │       ⌄      │       ⌄      │       ⌄      │       ⌄      │       ⌄      │
+// └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+        &trans        &kp LG(Z)      &kp LG(X)      &kp LG(C)      &kp LG(V)      &kp LG(Y)      &trans        &trans                         &trans         &trans         &trans         &trans         &trans         &trans
+//                                              ┌──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┐
+//                                              │       ⌄      │       ⌄      │       ⌄      │                                           │       ⌄      │       ⌄      │       ⌄      │
+//                                              └──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┘
+                                                     &trans         &trans         &trans                                                     &trans         &trans         &trans
+            >;
+            sensor-bindings = <&rsr_vol &rsr_trans>;
+        };
+
+        function_layer { // 5: FUN
+            display-name = "Function";
+            bindings = <
+// ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+// │      F11     │      F10     │      F9      │      F8      │      F7      │      F6      │                                           │    (none)    │    (none)    │  Mac layout  │  Win layout  │    (none)    │  bootloader  │
+// └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+        &kp F11       &kp F10         &kp F9         &kp F8         &kp F7         &kp F6                      &trans                          &none          &none        &tog MAC       &tog WIN         &none       &bootloader
+// ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+// │      F12     │      F1      │      F2      │      F3      │      F4      │      F5      │                                           │    (none)    │    (none)    │    (none)    │    (none)    │    (none)    │    (none)    │
+// └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+        &kp F12        &kp F1         &kp F2         &kp F3         &kp F4         &kp F5              &trans   &trans   &trans                &none          &none          &none          &none          &none          &none
+// ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+// │    (none)    │    (none)    │     vol -    │     mute     │     vol +    │    (none)    │                                           │     BT 0     │     BT 1     │     BT 2     │     BT 3     │     BT 4     │   BT clear   │
+// └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+        &none          &none      &kp C_VOL_DN     &kp C_MUTE    &kp C_VOL_UP       &none        &trans        &trans                      &bt BT_SEL0    &bt BT_SEL1    &bt BT_SEL2    &bt BT_SEL3    &bt BT_SEL4    &bt BT_CLR
+//                                              ┌──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┐
+//                                              │       ⌄      │       ⌄      │       ⌄      │                                           │       ⌄      │       ⌄      │       ⌄      │
+//                                              └──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┘
+                                                     &trans         &trans         &trans                                                     &trans         &trans         &trans
+            >;
             sensor-bindings = <&rsr_vol &rsr_trans>;
         };
     };
