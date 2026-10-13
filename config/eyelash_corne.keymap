@@ -57,7 +57,7 @@
             #binding-cells = <2>;
             flavor = "balanced";
             require-prior-idle-ms = <150>;
-            tapping-term-ms = <210>;
+            tapping-term-ms = <200>;
             quick-tap-ms = <175>;
             bindings = <&kp>, <&kp>;
             hold-trigger-key-positions = <7 8 9 10 11 12   22 23 24 25 26 27   36 37 38 39 40 41   43 44   45 46 47>; // keys on the right side of the keyboard + BKSP (43) and RET (44) keys
@@ -69,11 +69,21 @@
             #binding-cells = <2>;
             flavor = "balanced";
             require-prior-idle-ms = <150>;
-            tapping-term-ms = <210>;
+            tapping-term-ms = <200>;
             quick-tap-ms = <175>;
             bindings = <&kp>, <&kp>;
             hold-trigger-key-positions = <0 1 2 3 4 5   13 14 15 16 17 18   28 29 30 31 32 33   42 43 44>; // keys on the left side of the keyboard
             hold-trigger-on-release;
+        };
+
+        ltsp: layer_tap_space {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <175>;
+            quick-tap-ms = <175>;
+            require-prior-idle-ms = <120>;
+            bindings = <&mo>, <&kp>;
         };
     };
 
@@ -177,7 +187,7 @@
 //                                              ┌──────────────┬──────────────┬──────────────┐                                           ┌──────────────┬──────────────┬──────────────┐
 //                                              │  Esc (FUN)   │  Bksp (NWIN) │  Enter (SYM) │                                           │  Space (SYM) │   Tab (NWIN) │   Del (FUN)  │
 //                                              └──────────────┴──────────────┴──────────────┘                                           └──────────────┴──────────────┴──────────────┘
-                                                  &lt FUN ESC   &lt NWIN BSPC    &lt SYM RET                                              &lt SYM SPACE   &lt NWIN TAB   &lt FUN DEL
+                                                  &lt FUN ESC   &lt NWIN BSPC    &lt SYM RET                                             &ltsp SYM SPACE  &lt NWIN TAB    &lt FUN DEL
             >;
             sensor-bindings = <&rsr_vol &rsr_trans>;
         };
